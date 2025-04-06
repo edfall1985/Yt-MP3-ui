@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YT to MP3 - Bro Joe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #1c1c1e;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 24px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-bottom: 20px;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #00c853;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #00b342;
+    }
+    .log {
+      margin-top: 20px;
+      text-align: left;
+      background: #2a2a2d;
+      padding: 15px;
+      border-radius: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>YT to MP3 Converter</h1>
+    <input type="text" id="url" placeholder="Paste YouTube URL here..." />
+    <button onclick="download()">Convert to MP3</button>
+    <div id="result" class="log"></div>
+  </div>
+
+  <script>
+    async function download() {
+      const url = document.getElementById("url").value;
+      const resultBox = document.getElementById("result");
+      resultBox.innerText = "Sending request...";
+
+      try {
+        const res = await fetch("https://web-production-7418f.up.railway.app/download", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ youtube_url: url })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          resultBox.innerText = "Success!\n\n" + data.log;
+        } else {
+          resultBox.innerText = "Error:\n" + JSON.stringify(data, null, 2);
+        }
+      } catch (err) {
+        resultBox.innerText = "Connection Error:\n" + err;
+      }
+    }
+  </script>
+</body>
+</html>
