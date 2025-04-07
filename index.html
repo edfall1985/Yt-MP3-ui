@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YT to MP3 Converter</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #111; color: white; }
+    input, button { padding: 10px; margin: 10px; width: 80%; max-width: 500px; }
+    button { background: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+    #result a { color: #4CAF50; }
+  </style>
 </head>
-<body style="background: #1b1c1e; color: #f0f0f0; font-family: sans-serif; text-align: center; padding: 2rem;">
+<body>
   <h1>YT to MP3 Converter</h1>
-  <input type="text" id="url" placeholder="Paste YouTube URL here" style="width: 60%; padding: 0.5rem; font-size: 1rem;"/>
-  <br><br>
-  <button onclick="download()" style="padding: 0.7rem 1.5rem; font-size: 1rem; background-color: green; color: white; border: none; cursor: pointer;">
-    Convert to MP3
-  </button>
-  <br><br>
-  <pre id="result" style="color: lime;"></pre>
+  <input type="text" id="url" placeholder="Paste YouTube URL here" />
+  <button onclick="download()">Convert to MP3</button>
+  <div id="result"></div>
 
   <script>
     const apiUrl = "https://youtube-to-mp3-production.up.railway.app";
@@ -27,14 +28,18 @@
         const res = await fetch(apiUrl + "/download", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ youtube_url: url }),
+          body: JSON.stringify({ youtube_url: url })
         });
 
         const data = await res.json();
+
         if (res.ok) {
-          resultBox.innerText = `Success!\n\nMessage: ${data.message || "-"}\nURL: ${data.log || "-"}`;
+          resultBox.innerHTML = `
+            <p><strong>Success!</strong></p>
+            <p><a href="${apiUrl}${data.url}" download>Download MP3</a></p>
+          `;
         } else {
-          resultBox.innerText = `Error:\n${JSON.stringify(data, null, 2)}`;
+          resultBox.innerText = "Error:\n" + JSON.stringify(data, null, 2);
         }
       } catch (err) {
         resultBox.innerText = "Connection Error:\n" + err;
