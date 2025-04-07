@@ -1,18 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>YT to MP3 Converter</title>
   <style>
-    body { font-family: Arial; text-align: center; background: #111; color: white; }
-    input, button { padding: 10px; margin: 10px; width: 80%; max-width: 500px; }
-    button { background: #4CAF50; color: white; border: none; cursor: pointer; }
-    button:hover { background: #45a049; }
-    #result a { color: #4CAF50; }
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      padding: 2em;
+    }
+    input, button {
+      padding: 1em;
+      margin: 1em;
+      width: 80%;
+      max-width: 600px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #0f0;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 2em;
+    }
   </style>
 </head>
 <body>
   <h1>YT to MP3 Converter</h1>
-  <input type="text" id="url" placeholder="Paste YouTube URL here" />
+  <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=...">
+  <br>
   <button onclick="download()">Convert to MP3</button>
   <div id="result"></div>
 
@@ -34,10 +55,7 @@
         const data = await res.json();
 
         if (res.ok) {
-          resultBox.innerHTML = `
-            <p><strong>Success!</strong></p>
-            <p><a href="${apiUrl}${data.url}" download>Download MP3</a></p>
-          `;
+          resultBox.innerHTML = `<strong>Success!</strong><br>Download: <a href="${data.url}" target="_blank">${data.url}</a>`;
         } else {
           resultBox.innerText = "Error:\n" + JSON.stringify(data, null, 2);
         }
